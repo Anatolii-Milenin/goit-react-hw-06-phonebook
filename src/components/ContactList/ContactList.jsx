@@ -1,30 +1,37 @@
-import PropTypes from 'prop-types';
-import css from './ContactList.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getFilter } from 'redux/selectors';
+import { deleteContact } from 'redux/contactsSlice';
+import { Button, Item, List, Text } from './ContactList.styled';
 
-export const ContactList = ({ contacts, delContact }) => {
-  const contactItems = contacts.reduce((acc, contact) => {
-    const listItem = (
-      <li className={css.item} key={contact.id}>
-        <span>{contact.name}:</span>
-        <span className={css.number}>{contact.number}</span>
-        <button
-          className={css.button}
-          type="button"
-          onClick={() => {
-            delContact(contact.id);
-          }}
-        >
-          Delete
-        </button>
-      </li>
-    );
-    return [...acc, listItem];
-  }, []);
+export const ContactList = () => {
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
 
-  return <ul className={css.list}>{contactItems}</ul>;
-};
+  const filteredContacts = contacts?.filter(contact =>
+    contact?.name?.toLowerCase().includes(filter.toLowerCase())
+  );
 
-ContactList.propTypes = {
-  delContact: PropTypes.func.isRequired,
-  contacts: PropTypes.array.isRequired,
+  const onDeleteContact = id => {
+    dispatch(deleteContact(id));
+  };
+
+  if (!filteredContacts?.length) {
+    return <Text>No contacts found.</Text>;
+  }
+
+  return (
+    <List>
+      {filteredContacts.map(({ id, name, number }) => (
+        <Item key={id}>
+          <Text>
+            {name}: {number}
+          </Text>
+          <Button type="button" onClick={() => onDeleteContact(id)}>
+            Delete
+          </Button>
+        </Item>
+      ))}
+    </List>
+  );
 };

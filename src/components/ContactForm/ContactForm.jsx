@@ -19,7 +19,7 @@ export const ContactForm = () => {
     };
 
     const isExist = contacts.find(
-      ({ name }) => name[0].toLowerCase() === contact.name.toLowerCase()
+      ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
     );
 
     if (isExist) {

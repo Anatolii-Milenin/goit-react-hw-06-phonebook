@@ -33,11 +33,4 @@ export const SubmitButton = styled.button`
   border: 1px solid #c4c4c4;
   border-radius: 4px;
   cursor: pointer;
-  background-color: transparent;
-  transition: background-color 0.5s ease;
-
-  &:hover,
-  &:focus {
-    background-color: #c4c4c4;
-  }
 `;
